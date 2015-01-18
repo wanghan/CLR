@@ -15,6 +15,7 @@ namespace ThreadDemo
 
             Console.ReadLine();
             cts.Cancel();
+            Console.ReadLine();
         }
 
         private static void Count(CancellationToken token, Int32 countTo)
