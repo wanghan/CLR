@@ -8,7 +8,7 @@ namespace ThreadDemo
     {
         static void Main(string[] args)
         {
-            ExecutionContextsDemo();
+            CancellationDemo.Go();
         }
 
         private static void ThreadPoolDemo()
