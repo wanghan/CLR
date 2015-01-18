@@ -31,7 +31,7 @@ namespace ThreadDemo
             }
         }
 
-        private static void Count(CancellationToken token, Int32 countTo)
+        internal static void Count(CancellationToken token, Int32 countTo)
         {
             for (Int32 count = 0; count < countTo; ++count)
             {
