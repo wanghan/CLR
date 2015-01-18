@@ -10,7 +10,7 @@ namespace ThreadDemo
         {
             CancellationTokenSource cts = new CancellationTokenSource();
 
-            Task<Int32> task = new Task<Int32>(() => Sum(cts.Token, 10000000), cts.Token);
+            Task<Int32> task = new Task<Int32>(() => Sum(cts.Token, 10000), cts.Token);
             task.Start();
 
             //cts.Cancel();
@@ -18,7 +18,10 @@ namespace ThreadDemo
             try
             {
                 // If the task got canceled, result will throw an AggregateException
-                Console.WriteLine("The sum is " + task.Result);
+                // task.Result will block the current thread.
+                // Console.WriteLine("The sum is " + task.Result);
+
+                task.ContinueWith(t => Console.WriteLine("The sum is " + t.Result));
             }
             catch (AggregateException ae)
             {
@@ -29,6 +32,7 @@ namespace ThreadDemo
                 Console.WriteLine("Sum was canceled.");
             }
 
+            Console.WriteLine("Wait here.");
             Console.ReadLine();
         }
 
