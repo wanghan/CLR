@@ -7,17 +7,28 @@ namespace ThreadDemo
     {
         public static void Go()
         {
-            CancellationTokenSource cts = new CancellationTokenSource();
+            try
+            {
+                CancellationTokenSource cts = new CancellationTokenSource();
 
-            cts.Token.Register(AfterCancelCallback);
+                cts.Token.Register(AfterCancelCallbackWithException);
+                cts.Token.Register(AfterCancelCallbackWithException);
 
-            ThreadPool.QueueUserWorkItem(o => Count(cts.Token, 10));
+                ThreadPool.QueueUserWorkItem(o => Count(cts.Token, 10));
 
-            Console.WriteLine("Press <enter> to cancel the operation");
+                Console.WriteLine("Press <enter> to cancel the operation");
 
-            Console.ReadLine();
-            cts.Cancel();
-            Console.ReadLine();
+                Console.ReadLine();
+
+                // True means the first callback method that throws an unhandled exception stops the other callbacks 
+                cts.Cancel(true);
+                Console.ReadLine();
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
         }
 
         private static void Count(CancellationToken token, Int32 countTo)
@@ -40,6 +51,12 @@ namespace ThreadDemo
         private static void AfterCancelCallback()
         {
             Console.WriteLine("After cancel callback is invoking.");
+        }
+
+        private static void AfterCancelCallbackWithException()
+        {
+            Console.WriteLine("After cancel callback with Exception is invoking.");
+            throw new Exception(string.Format("Exception is thrown at {0}", DateTime.Now));
         }
     }
 }
