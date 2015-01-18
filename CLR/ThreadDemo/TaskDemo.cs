@@ -10,27 +10,17 @@ namespace ThreadDemo
         {
             CancellationTokenSource cts = new CancellationTokenSource();
 
-            Task<Int32> task = new Task<Int32>(() => Sum(cts.Token, 10000), cts.Token);
+            Task<Int32> task = new Task<Int32>(() => Sum(cts.Token, 100000), cts.Token);
             task.Start();
 
-            //cts.Cancel();
+            // cts.Cancel();
 
-            try
-            {
-                // If the task got canceled, result will throw an AggregateException
-                // task.Result will block the current thread.
-                // Console.WriteLine("The sum is " + task.Result);
-
-                task.ContinueWith(t => Console.WriteLine("The sum is " + t.Result));
-            }
-            catch (AggregateException ae)
-            {
-                // Consider any OperationCanceledException objects as handled.
-                // Any other exception cause a new AggregateException containing only the unhandled exceptions to be thrown.
-                ae.Handle(e => e is OperationCanceledException);
-
-                Console.WriteLine("Sum was canceled.");
-            }
+            task.ContinueWith(t => Console.WriteLine("The sum is " + t.Result),
+                TaskContinuationOptions.OnlyOnRanToCompletion);
+            task.ContinueWith(t => Console.WriteLine("Exception threw: " + t.Exception),
+                TaskContinuationOptions.OnlyOnFaulted);
+            task.ContinueWith(t => Console.WriteLine("Task cancled"),
+                TaskContinuationOptions.OnlyOnCanceled);
 
             Console.WriteLine("Wait here.");
             Console.ReadLine();
