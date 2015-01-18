@@ -9,6 +9,8 @@ namespace ThreadDemo
         {
             CancellationTokenSource cts = new CancellationTokenSource();
 
+            cts.Token.Register(AfterCancelCallback);
+
             ThreadPool.QueueUserWorkItem(o => Count(cts.Token, 10));
 
             Console.WriteLine("Press <enter> to cancel the operation");
@@ -33,6 +35,11 @@ namespace ThreadDemo
             }
 
             Console.WriteLine("Count is done.");
+        }
+
+        private static void AfterCancelCallback()
+        {
+            Console.WriteLine("After cancel callback is invoking.");
         }
     }
 }
