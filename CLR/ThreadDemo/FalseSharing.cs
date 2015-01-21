@@ -7,10 +7,13 @@ namespace ThreadDemo
 {
     internal static class FalseSharing
     {
+        [StructLayout(LayoutKind.Explicit)]
         private class Data
         {
+            [FieldOffset(0)]
             public Int32 field1;
 
+            [FieldOffset(64)]
             public Int32 field2;
         }
 
