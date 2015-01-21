@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -45,6 +46,29 @@ namespace ThreadDemo
                 );
 
             return masterLength;
+        }
+
+        public static void ObsoleteMethods(Assembly assembly)
+        {
+            var query =
+                from type in assembly.GetExportedTypes().AsParallel<Type>()
+
+                from method in type.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static)
+
+                let obsoleteAttrType = typeof(ObsoleteAttribute)
+
+                where Attribute.IsDefined(method, obsoleteAttrType)
+
+                orderby type.FullName
+
+                let obsoleteAttrObj = (ObsoleteAttribute)Attribute.GetCustomAttribute(method, obsoleteAttrType)
+
+                select String.Format("Type={0}\nMethod={1}\nMessage={2}\n", type.FullName, method.ToString(), obsoleteAttrObj.Message);
+
+            foreach (var result in query)
+            {
+                Console.WriteLine(result);
+            }
         }
     }
 }

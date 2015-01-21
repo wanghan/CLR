@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="CancellationDemo.cs" />
     <Compile Include="CancellationLinkDemo.cs" />
+    <Compile Include="ParallelDemo.cs" />
     <Compile Include="TaskDemo.cs" />
     <Compile Include="ThreadPoolSample.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

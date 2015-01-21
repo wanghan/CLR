@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Runtime.Remoting.Messaging;
 using System.Threading;
 
@@ -8,7 +9,7 @@ namespace ThreadDemo
     {
         static void Main(string[] args)
         {
-            CancellationDemo.Go();
+            ParallelDemo.ObsoleteMethods(Assembly.LoadFile(@"D:\LabExplorer\MSTSCLib.dll"));
         }
 
         private static void ThreadPoolDemo()
